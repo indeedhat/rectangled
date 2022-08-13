@@ -34,6 +34,16 @@ func NewRectangle[T any](id T, x, y, w, z int) Rectangle[T] {
 	}
 }
 
+// Offset returns a copy of the Rectangle with its coords offset by the x,y of the target Rectangle
+func (rect Rectangle[T]) Offset(target Rectangle[T]) Rectangle[T] {
+	rect.X += target.X
+	rect.W += target.X
+	rect.Y += target.Y
+	rect.Z += target.Y
+
+	return rect
+}
+
 // Area calculates the area of the rectangle
 func (rect Rectangle[T]) Area() int {
 	return abs((rect.W - rect.X) * (rect.Z - rect.Y))

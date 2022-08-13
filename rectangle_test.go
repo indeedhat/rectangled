@@ -123,6 +123,37 @@ func TestRectangleTouches(t *testing.T) {
 	}
 }
 
+var rectangleOffsetTests = []struct {
+	rect   rectangled.Rectangle[string]
+	target rectangled.Rectangle[string]
+}{
+	{
+		rectangled.NewRectangle("pos offset", 0, 0, 10, 10),
+		rectangled.NewRectangle("pos offset", 10, 10, 0, 0),
+	},
+	{
+		rectangled.NewRectangle("neg offset", 0, 0, 10, 10),
+		rectangled.NewRectangle("neg offset", -10, -10, 0, 0),
+	},
+	{
+		rectangled.NewRectangle("zero offset", 0, 0, 10, 10),
+		rectangled.NewRectangle("zero offset", 0, 0, 0, 0),
+	},
+}
+
+func TestRectangleOffset(t *testing.T) {
+	for _, testCase := range rectangleOffsetTests {
+		t.Run(testCase.rect.ID, func(t *testing.T) {
+			offset := testCase.rect.Offset(testCase.target)
+
+			require.Equal(t, testCase.rect.X+testCase.target.X, offset.X)
+			require.Equal(t, testCase.rect.W+testCase.target.X, offset.W)
+			require.Equal(t, testCase.rect.Y+testCase.target.Y, offset.Y)
+			require.Equal(t, testCase.rect.Z+testCase.target.X, offset.Z)
+		})
+	}
+}
+
 var rectangleAreaTests = []struct {
 	rect     rectangled.Rectangle[string]
 	expected int
