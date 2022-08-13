@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/indedhat/rectangled"
+	"github.com/indeedhat/rectangled"
 	"github.com/stretchr/testify/require"
 )
 
@@ -191,4 +191,52 @@ func TestSetOffsetChildren(t *testing.T) {
 			}
 		})
 	}
+}
+
+func TestSetTopLeftMostChild(t *testing.T) {
+	var set, _ = rectangled.NewSet("top-left-most-child", 0, 0, []rectangled.Rectangle[string]{
+		rectangled.NewRectangle("bottom-right", 10, 10, 20, 20),
+		rectangled.NewRectangle("bottom-left", 0, 10, 10, 20),
+		rectangled.NewRectangle("top-right", 10, 0, 20, 10),
+		rectangled.NewRectangle("top-left", 0, 0, 10, 10),
+		rectangled.NewRectangle("center", 5, 5, 15, 15),
+	})
+
+	require.Equal(t, "top-left", set.TopLeftMostChild().ID)
+}
+
+func TestSetTopRightMostChild(t *testing.T) {
+	var set, _ = rectangled.NewSet("top-right-most-child", 0, 0, []rectangled.Rectangle[string]{
+		rectangled.NewRectangle("bottom-left", 0, 10, 10, 20),
+		rectangled.NewRectangle("bottom-right", 10, 10, 20, 20),
+		rectangled.NewRectangle("top-left", 0, 0, 10, 10),
+		rectangled.NewRectangle("top-right", 10, 0, 20, 10),
+		rectangled.NewRectangle("center", 5, 5, 15, 15),
+	})
+
+	require.Equal(t, "top-right", set.TopRightMostChild().ID)
+}
+
+func TestSetBottomLeftMostChild(t *testing.T) {
+	var set, _ = rectangled.NewSet("bottom-left-most-child", 0, 0, []rectangled.Rectangle[string]{
+		rectangled.NewRectangle("top-right", 10, 0, 20, 10),
+		rectangled.NewRectangle("top-left", 0, 0, 10, 10),
+		rectangled.NewRectangle("bottom-right", 10, 10, 20, 20),
+		rectangled.NewRectangle("bottom-left", 0, 10, 10, 20),
+		rectangled.NewRectangle("center", 5, 5, 15, 15),
+	})
+
+	require.Equal(t, "bottom-left", set.BottomLeftMostChild().ID)
+}
+
+func TestSetBottomRightMostChild(t *testing.T) {
+	var set, _ = rectangled.NewSet("bottom-right-most-child", 0, 0, []rectangled.Rectangle[string]{
+		rectangled.NewRectangle("top-left", 0, 0, 10, 10),
+		rectangled.NewRectangle("top-right", 10, 0, 20, 10),
+		rectangled.NewRectangle("bottom-left", 0, 10, 10, 20),
+		rectangled.NewRectangle("bottom-right", 10, 10, 20, 20),
+		rectangled.NewRectangle("center", 5, 5, 15, 15),
+	})
+
+	require.Equal(t, "bottom-right", set.BottomRightMostChild().ID)
 }

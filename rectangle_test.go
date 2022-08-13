@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/indedhat/rectangled"
+	"github.com/indeedhat/rectangled"
 	"github.com/stretchr/testify/require"
 )
 

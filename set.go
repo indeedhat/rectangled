@@ -117,3 +117,83 @@ func (set *Set[T]) OffsetChildren() []Rectangle[T] {
 
 	return offsetChildren
 }
+
+// TopLeftMostChild returns the child that is in the top left most position (or as close to)
+// of the sets bounding box
+//
+// X position is prioratised over Y
+func (set *Set[T]) TopLeftMostChild() Rectangle[T] {
+	var target *Rectangle[T]
+
+	for i, rect := range set.children {
+		if target == nil {
+			target = &set.children[i]
+		} else if rect.X < target.X {
+			target = &set.children[i]
+		} else if rect.W == target.W && rect.Y < target.Y {
+			target = &set.children[i]
+		}
+	}
+
+	return *target
+}
+
+// TopRightMostChild returns the child that is in the top right most position (or as close to)
+// of the sets bounding box
+//
+// X position is prioratised over Y
+func (set *Set[T]) TopRightMostChild() Rectangle[T] {
+	var target *Rectangle[T]
+
+	for i, rect := range set.children {
+		if target == nil {
+			target = &set.children[i]
+		} else if rect.W > target.W {
+			target = &set.children[i]
+		} else if rect.X == target.X && rect.Y < target.Y {
+			target = &set.children[i]
+		}
+	}
+
+	return *target
+}
+
+// BottomLeftMostChild returns the child that is in the bottom left most position (or as close to)
+// of the sets bounding box
+//
+// X position is prioratised over Y
+func (set *Set[T]) BottomLeftMostChild() Rectangle[T] {
+	var target *Rectangle[T]
+
+	for i, rect := range set.children {
+		if target == nil {
+			target = &set.children[i]
+		} else if rect.X < target.X {
+			target = &set.children[i]
+		} else if rect.X == target.X && rect.Y > target.Y {
+			target = &set.children[i]
+		}
+	}
+
+	return *target
+}
+
+// BottomRightMostChild returns the child that is in the bottom right most position (or as close to)
+// of the sets bounding box
+//
+// X position is prioratised over Y
+func (set *Set[T]) BottomRightMostChild() Rectangle[T] {
+	var target *Rectangle[T]
+
+	for i, rect := range set.children {
+		if target == nil {
+			target = &set.children[i]
+		} else if rect.W > target.W {
+			target = &set.children[i]
+		} else if rect.W == target.W && rect.Y > target.Y {
+			target = &set.children[i]
+		}
+	}
+
+	return *target
+}
