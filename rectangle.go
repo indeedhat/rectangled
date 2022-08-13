@@ -69,41 +69,36 @@ func (rect Rectangle[T]) OverlappingArea(target Rectangle[T]) *Rectangle[T] {
 	return &overlap
 }
 
-// Touches returns the side that this rectangle touches the given one
+// Touches returns a slice of sides in which the reciever Rectangle touches the target
 // It does not care about overlapps so an internal rectangle that has a
 // touching edge will be found
-//
-// This method will only return the firs touching edge found with the order of presedence being
-// - Top
-// - Right
-// - Bottom
-// - Left
-func (rect Rectangle[T]) Touches(target Rectangle[T]) Edge {
+func (rect Rectangle[T]) Touches(target Rectangle[T]) []Edge {
+	var edges []Edge
 	if (rect.Y == target.Z || rect.Y == target.Y) &&
 		rect.X < target.W && rect.W > target.X {
 
-		return Top
+		edges = append(edges, Top)
 	}
 
 	if (rect.W == target.X || rect.W == target.W) &&
 		rect.Y < target.Z && rect.Z > target.Y {
 
-		return Right
+		edges = append(edges, Right)
 	}
 
 	if (rect.Z == target.Y || rect.Z == target.Z) &&
 		rect.X < target.W && rect.W > target.X {
 
-		return Bottom
+		edges = append(edges, Bottom)
 	}
 
 	if (rect.X == target.W || rect.X == target.X) &&
 		rect.Y < target.Z && rect.Z > target.Y {
 
-		return Left
+		edges = append(edges, Left)
 	}
 
-	return UnknownEdge
+	return edges
 }
 
 // Area calculates the area of the rectangle

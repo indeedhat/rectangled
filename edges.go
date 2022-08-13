@@ -29,7 +29,6 @@ const (
 	Right
 	Bottom
 	Left
-	UnknownEdge
 )
 
 // EdgeCoordinates is an alias of rectangle

@@ -85,7 +85,7 @@ func (set *Set[T]) TouchesChildren(target Set[T]) []Rectangle[T] {
 	var touching []Rectangle[T]
 
 	for _, rect := range target.children {
-		if set.Touches(rect) != UnknownEdge {
+		if set.Touches(rect) != nil {
 			touching = append(touching, rect)
 		}
 	}
