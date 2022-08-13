@@ -35,4 +35,4 @@ const (
 // that represents the coordinates of single Rectangle edge
 // X,Y represent the starting (top or left) most point of the line
 // W,Z represent the ending (bottom or right) most point of the line
-type EdgeCoordinates Rectangle[any]
+type EdgeCoordinates[T any] Rectangle[T]

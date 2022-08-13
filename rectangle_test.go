@@ -233,3 +233,59 @@ func TestRectangleHeight(t *testing.T) {
 		})
 	}
 }
+
+func edge(id string, x, y, w, z int) *rectangled.EdgeCoordinates[string] {
+	return &rectangled.EdgeCoordinates[string]{
+		ID: id,
+		X:  x,
+		Y:  y,
+		W:  w,
+		Z:  z,
+	}
+}
+
+var rectangleTouchCoordinatesTests = []struct {
+	rect      rectangled.Rectangle[string]
+	target    rectangled.Rectangle[string]
+	coords    [4]*rectangled.EdgeCoordinates[string]
+	coordsRev [4]*rectangled.EdgeCoordinates[string]
+}{
+	{
+		rectangled.NewRectangle("below", 0, 10, 20, 20),
+		rectangled.NewRectangle("above", 5, 0, 15, 10),
+		[4]*rectangled.EdgeCoordinates[string]{
+			edge("above", 5, 10, 15, 10), nil, nil, nil,
+		},
+		[4]*rectangled.EdgeCoordinates[string]{
+			nil, nil, edge("below", 5, 10, 15, 10), nil,
+		},
+	},
+	{
+		rectangled.NewRectangle("left", 0, 0, 10, 20),
+		rectangled.NewRectangle("right", 10, 5, 15, 15),
+		[4]*rectangled.EdgeCoordinates[string]{
+			nil, edge("right", 10, 5, 10, 15), nil, nil,
+		},
+		[4]*rectangled.EdgeCoordinates[string]{
+			nil, nil, nil, edge("left", 10, 5, 10, 15),
+		},
+	},
+}
+
+func TestRectangleEdgeCoordinates(t *testing.T) {
+	for _, testCase := range rectangleTouchCoordinatesTests {
+		t.Run(fmt.Sprintf("%s -> %s", testCase.rect.ID, testCase.target.ID), func(t *testing.T) {
+			require.Equal(t, testCase.coords[0], testCase.rect.TouchCoordinates(testCase.target, rectangled.Top))
+			require.Equal(t, testCase.coords[1], testCase.rect.TouchCoordinates(testCase.target, rectangled.Right))
+			require.Equal(t, testCase.coords[2], testCase.rect.TouchCoordinates(testCase.target, rectangled.Bottom))
+			require.Equal(t, testCase.coords[3], testCase.rect.TouchCoordinates(testCase.target, rectangled.Left))
+		})
+
+		t.Run(fmt.Sprintf("%s -> %s", testCase.target.ID, testCase.rect.ID), func(t *testing.T) {
+			require.Equal(t, testCase.coordsRev[0], testCase.target.TouchCoordinates(testCase.rect, rectangled.Top))
+			require.Equal(t, testCase.coordsRev[1], testCase.target.TouchCoordinates(testCase.rect, rectangled.Right))
+			require.Equal(t, testCase.coordsRev[2], testCase.target.TouchCoordinates(testCase.rect, rectangled.Bottom))
+			require.Equal(t, testCase.coordsRev[3], testCase.target.TouchCoordinates(testCase.rect, rectangled.Left))
+		})
+	}
+}

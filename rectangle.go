@@ -89,31 +89,99 @@ func (rect Rectangle[T]) OverlappingArea(target Rectangle[T]) *Rectangle[T] {
 // touching edge will be found
 func (rect Rectangle[T]) Touches(target Rectangle[T]) []Edge {
 	var edges []Edge
-	if (rect.Y == target.Z || rect.Y == target.Y) &&
-		rect.X < target.W && rect.W > target.X {
-
+	if touchesTop(rect, target) {
 		edges = append(edges, Top)
 	}
 
-	if (rect.W == target.X || rect.W == target.W) &&
-		rect.Y < target.Z && rect.Z > target.Y {
-
+	if touchesRight(rect, target) {
 		edges = append(edges, Right)
 	}
 
-	if (rect.Z == target.Y || rect.Z == target.Z) &&
-		rect.X < target.W && rect.W > target.X {
-
+	if touchesBottom(rect, target) {
 		edges = append(edges, Bottom)
 	}
 
-	if (rect.X == target.W || rect.X == target.X) &&
-		rect.Y < target.Z && rect.Z > target.Y {
-
+	if touchesLeft(rect, target) {
 		edges = append(edges, Left)
 	}
 
 	return edges
+}
+
+// TouchCoordinates returns the coordinates of the touch area/line between two rectangles
+// if there is no touch on the given edge nil will be returned
+func (rect Rectangle[T]) TouchCoordinates(target Rectangle[T], edge Edge) *EdgeCoordinates[T] {
+	switch edge {
+	case Top:
+		if touchesTop(rect, target) {
+			return &EdgeCoordinates[T]{
+				ID: target.ID,
+				X:  max(rect.X, target.X),
+				Y:  rect.Y,
+				W:  min(rect.W, target.W),
+				Z:  rect.Y,
+			}
+		}
+
+	case Right:
+		if touchesRight(rect, target) {
+			return &EdgeCoordinates[T]{
+				ID: target.ID,
+				X:  rect.W,
+				Y:  max(rect.Y, target.Y),
+				W:  rect.W,
+				Z:  min(rect.Z, target.Z),
+			}
+		}
+
+	case Bottom:
+		if touchesBottom(rect, target) {
+			return &EdgeCoordinates[T]{
+				ID: target.ID,
+				X:  max(rect.X, target.X),
+				Y:  rect.Z,
+				W:  min(rect.W, target.W),
+				Z:  rect.Z,
+			}
+		}
+
+	case Left:
+		if touchesLeft(rect, target) {
+			return &EdgeCoordinates[T]{
+				ID: target.ID,
+				X:  rect.X,
+				Y:  max(rect.Y, target.Y),
+				W:  rect.X,
+				Z:  min(rect.Z, target.Z),
+			}
+		}
+	}
+
+	return nil
+}
+
+// touchesTop checks if the top of rect touches the top or bottom of target
+func touchesTop[T any](rect, target Rectangle[T]) bool {
+	return (rect.Y == target.Z || rect.Y == target.Y) &&
+		rect.X < target.W && rect.W > target.X
+}
+
+// touchesRight checks if the right of rect touches the right or left of target
+func touchesRight[T any](rect, target Rectangle[T]) bool {
+	return (rect.W == target.X || rect.W == target.W) &&
+		rect.Y < target.Z && rect.Z > target.Y
+}
+
+// touchesBottom checks if the bottom of rect touches the bottom or top of target
+func touchesBottom[T any](rect, target Rectangle[T]) bool {
+	return (rect.Z == target.Y || rect.Z == target.Z) &&
+		rect.X < target.W && rect.W > target.X
+}
+
+// touchesLeft checks if the left of rect touches the right or left of target
+func touchesLeft[T any](rect, target Rectangle[T]) bool {
+	return (rect.X == target.W || rect.X == target.X) &&
+		rect.Y < target.Z && rect.Z > target.Y
 }
 
 // Validate checks if the rectangle is valid
