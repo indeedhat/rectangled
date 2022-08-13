@@ -1,4 +1,4 @@
-module github.com/indedhat/rectangled
+module github.com/indeedhat/rectangled
 
 go 1.18
 
