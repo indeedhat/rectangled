@@ -34,6 +34,21 @@ func NewRectangle[T any](id T, x, y, w, z int) Rectangle[T] {
 	}
 }
 
+// Area calculates the area of the rectangle
+func (rect Rectangle[T]) Area() int {
+	return abs((rect.W - rect.X) * (rect.Z - rect.Y))
+}
+
+// Width returns the calculated width of the rectangle
+func (rect Rectangle[T]) Width() int {
+	return abs(rect.W - rect.X)
+}
+
+// Height returns the calculated height of the rectangle
+func (rect Rectangle[T]) Height() int {
+	return abs(rect.Z - rect.Y)
+}
+
 // Overlaps checks if target rectangle overlaps with this one
 func (rect Rectangle[T]) Overlaps(target Rectangle[T]) bool {
 	if rect.X >= target.W || target.X >= rect.W {
@@ -99,11 +114,6 @@ func (rect Rectangle[T]) Touches(target Rectangle[T]) []Edge {
 	}
 
 	return edges
-}
-
-// Area calculates the area of the rectangle
-func (rect Rectangle[T]) Area() int {
-	return abs((rect.W - rect.X) * (rect.Z - rect.Y))
 }
 
 // Validate checks if the rectangle is valid

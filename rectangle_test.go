@@ -205,3 +205,31 @@ func TestRectangleOverlappingArea(t *testing.T) {
 		})
 	}
 }
+
+var rectangleWidthHeightTests = []struct {
+	rect           rectangled.Rectangle[string]
+	expectedWidth  int
+	expectedHeight int
+}{
+	{rectangled.NewRectangle("simple", 0, 0, 10, 10), 10, 10},
+	{rectangled.NewRectangle("negative", -20, -20, -10, -10), 10, 10},
+	{rectangled.NewRectangle("negative->posative", -10, -10, 10, 10), 20, 20},
+	// although this requires a Rectangle that would not pass the Validate checks its worth testing imo
+	{rectangled.NewRectangle("zero-size", 0, 0, 0, 0), 0, 0},
+}
+
+func TestRectangleWidth(t *testing.T) {
+	for _, testCase := range rectangleWidthHeightTests {
+		t.Run(testCase.rect.ID, func(t *testing.T) {
+			require.Equal(t, testCase.expectedWidth, testCase.rect.Width())
+		})
+	}
+}
+
+func TestRectangleHeight(t *testing.T) {
+	for _, testCase := range rectangleWidthHeightTests {
+		t.Run(testCase.rect.ID, func(t *testing.T) {
+			require.Equal(t, testCase.expectedHeight, testCase.rect.Height())
+		})
+	}
+}
