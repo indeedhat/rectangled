@@ -118,82 +118,68 @@ func (set *Set[T]) OffsetChildren() []Rectangle[T] {
 	return offsetChildren
 }
 
-// TopLeftMostChild returns the child that is in the top left most position (or as close to)
-// of the sets bounding box
-//
-// X position is prioratised over Y
-func (set *Set[T]) TopLeftMostChild() Rectangle[T] {
+// ChildOnEdge finds the Rectangle closest to the priorityEdge within the Set
+// Should more than one Rectangle be equally close then the one closest to the secondaryEdge
+// will be picked
+func (set *Set[T]) ChildOnEdge(priorityEdge, secondaryEdge Edge) *Rectangle[T] {
 	var target *Rectangle[T]
 
-	for i, rect := range set.children {
+	for i := range set.children {
+		child := &set.children[i]
+
 		if target == nil {
-			target = &set.children[i]
-		} else if rect.X < target.X {
-			target = &set.children[i]
-		} else if rect.W == target.W && rect.Y < target.Y {
-			target = &set.children[i]
+			target = child
+			continue
+		}
+
+		if closer := findClosetsToEdge(target, child, priorityEdge); closer != nil {
+			target = closer
+		} else if closer := findClosetsToEdge(target, child, secondaryEdge); closer != nil {
+			target = closer
 		}
 	}
 
-	return *target
+	return target
 }
 
-// TopRightMostChild returns the child that is in the top right most position (or as close to)
-// of the sets bounding box
+// findClosetsToEdge compares the coords of the given Rectangles and returns the Rectangle
+// that is closest to the given edge
 //
-// X position is prioratised over Y
-func (set *Set[T]) TopRightMostChild() Rectangle[T] {
-	var target *Rectangle[T]
-
-	for i, rect := range set.children {
-		if target == nil {
-			target = &set.children[i]
-		} else if rect.W > target.W {
-			target = &set.children[i]
-		} else if rect.X == target.X && rect.Y < target.Y {
-			target = &set.children[i]
+// if they are equally close the nil will be returned
+func findClosetsToEdge[T any](a, b *Rectangle[T], edge Edge) *Rectangle[T] {
+	switch edge {
+	case Top:
+		fallthrough
+	default:
+		if a.Y < b.Y {
+			return a
+		} else if a.Y > b.Y {
+			return b
 		}
-	}
+		return nil
 
-	return *target
-}
-
-// BottomLeftMostChild returns the child that is in the bottom left most position (or as close to)
-// of the sets bounding box
-//
-// X position is prioratised over Y
-func (set *Set[T]) BottomLeftMostChild() Rectangle[T] {
-	var target *Rectangle[T]
-
-	for i, rect := range set.children {
-		if target == nil {
-			target = &set.children[i]
-		} else if rect.X < target.X {
-			target = &set.children[i]
-		} else if rect.X == target.X && rect.Y > target.Y {
-			target = &set.children[i]
+	case Right:
+		if a.W > b.W {
+			return a
+		} else if a.W < b.W {
+			return b
 		}
-	}
+		return nil
 
-	return *target
-}
-
-// BottomRightMostChild returns the child that is in the bottom right most position (or as close to)
-// of the sets bounding box
-//
-// X position is prioratised over Y
-func (set *Set[T]) BottomRightMostChild() Rectangle[T] {
-	var target *Rectangle[T]
-
-	for i, rect := range set.children {
-		if target == nil {
-			target = &set.children[i]
-		} else if rect.W > target.W {
-			target = &set.children[i]
-		} else if rect.W == target.W && rect.Y > target.Y {
-			target = &set.children[i]
+	case Bottom:
+		if a.Z > b.Z {
+			return a
+		} else if a.Z < b.Z {
+			return b
 		}
-	}
+		return nil
 
-	return *target
+	case Left:
+		if a.X < b.X {
+			return a
+		} else if a.X > b.X {
+			return b
+		}
+		return nil
+	}
 }

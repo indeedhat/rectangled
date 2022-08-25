@@ -193,50 +193,30 @@ func TestSetOffsetChildren(t *testing.T) {
 	}
 }
 
-func TestSetTopLeftMostChild(t *testing.T) {
-	var set, _ = rectangled.NewSet("top-left-most-child", 0, 0, []rectangled.Rectangle[string]{
-		rectangled.NewRectangle("bottom-right", 10, 10, 20, 20),
-		rectangled.NewRectangle("bottom-left", 0, 10, 10, 20),
-		rectangled.NewRectangle("top-right", 10, 0, 20, 10),
-		rectangled.NewRectangle("top-left", 0, 0, 10, 10),
-		rectangled.NewRectangle("center", 5, 5, 15, 15),
-	})
-
-	require.Equal(t, "top-left", set.TopLeftMostChild().ID)
-}
-
-func TestSetTopRightMostChild(t *testing.T) {
-	var set, _ = rectangled.NewSet("top-right-most-child", 0, 0, []rectangled.Rectangle[string]{
-		rectangled.NewRectangle("bottom-left", 0, 10, 10, 20),
-		rectangled.NewRectangle("bottom-right", 10, 10, 20, 20),
-		rectangled.NewRectangle("top-left", 0, 0, 10, 10),
-		rectangled.NewRectangle("top-right", 10, 0, 20, 10),
-		rectangled.NewRectangle("center", 5, 5, 15, 15),
-	})
-
-	require.Equal(t, "top-right", set.TopRightMostChild().ID)
-}
-
-func TestSetBottomLeftMostChild(t *testing.T) {
-	var set, _ = rectangled.NewSet("bottom-left-most-child", 0, 0, []rectangled.Rectangle[string]{
-		rectangled.NewRectangle("top-right", 10, 0, 20, 10),
-		rectangled.NewRectangle("top-left", 0, 0, 10, 10),
-		rectangled.NewRectangle("bottom-right", 10, 10, 20, 20),
-		rectangled.NewRectangle("bottom-left", 0, 10, 10, 20),
-		rectangled.NewRectangle("center", 5, 5, 15, 15),
-	})
-
-	require.Equal(t, "bottom-left", set.BottomLeftMostChild().ID)
-}
-
-func TestSetBottomRightMostChild(t *testing.T) {
+func TestSetChildOnEdge(t *testing.T) {
 	var set, _ = rectangled.NewSet("bottom-right-most-child", 0, 0, []rectangled.Rectangle[string]{
+		rectangled.NewRectangle("top-middle", 5, 0, 15, 10),
+		rectangled.NewRectangle("bottom-middle", 5, 10, 15, 20),
+		rectangled.NewRectangle("right-middle", 10, 5, 20, 15),
+		rectangled.NewRectangle("left-middle", 0, 5, 10, 15),
+
 		rectangled.NewRectangle("top-left", 0, 0, 10, 10),
 		rectangled.NewRectangle("top-right", 10, 0, 20, 10),
 		rectangled.NewRectangle("bottom-left", 0, 10, 10, 20),
 		rectangled.NewRectangle("bottom-right", 10, 10, 20, 20),
+
 		rectangled.NewRectangle("center", 5, 5, 15, 15),
 	})
 
-	require.Equal(t, "bottom-right", set.BottomRightMostChild().ID)
+	require.Equal(t, "top-right", set.ChildOnEdge(rectangled.Top, rectangled.Right).ID)
+	require.Equal(t, "top-left", set.ChildOnEdge(rectangled.Top, rectangled.Left).ID)
+
+	require.Equal(t, "bottom-right", set.ChildOnEdge(rectangled.Bottom, rectangled.Right).ID)
+	require.Equal(t, "bottom-left", set.ChildOnEdge(rectangled.Bottom, rectangled.Left).ID)
+
+	require.Equal(t, "top-right", set.ChildOnEdge(rectangled.Right, rectangled.Top).ID)
+	require.Equal(t, "bottom-right", set.ChildOnEdge(rectangled.Right, rectangled.Bottom).ID)
+
+	require.Equal(t, "top-left", set.ChildOnEdge(rectangled.Left, rectangled.Top).ID)
+	require.Equal(t, "bottom-left", set.ChildOnEdge(rectangled.Left, rectangled.Bottom).ID)
 }
