@@ -1,4 +1,4 @@
-package rectangled
+package rekt
 
 // max returns the lagrer int of the provided options
 func max(a, b int) int {

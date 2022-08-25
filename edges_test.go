@@ -1,21 +1,21 @@
-package rectangled_test
+package rekt_test
 
 import (
 	"testing"
 
-	"github.com/indeedhat/rectangled"
+	"github.com/indeedhat/rekt"
 	"github.com/stretchr/testify/require"
 )
 
 var edgesStringTests = []struct {
-	edge     rectangled.Edge
+	edge     rekt.Edge
 	expected string
 }{
-	{rectangled.Top, "Top"},
-	{rectangled.Right, "Right"},
-	{rectangled.Bottom, "Bottom"},
-	{rectangled.Left, "Left"},
-	{rectangled.Edge(100), "Unknown"},
+	{rekt.Top, "Top"},
+	{rekt.Right, "Right"},
+	{rekt.Bottom, "Bottom"},
+	{rekt.Left, "Left"},
+	{rekt.Edge(100), "Unknown"},
 }
 
 func TestEdgeString(t *testing.T) {

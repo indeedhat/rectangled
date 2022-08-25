@@ -1,4 +1,4 @@
-package rectangled
+package rekt
 
 import (
 	"errors"

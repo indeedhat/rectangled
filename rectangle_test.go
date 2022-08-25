@@ -1,100 +1,100 @@
-package rectangled_test
+package rekt_test
 
 import (
 	"fmt"
 	"testing"
 
-	"github.com/indeedhat/rectangled"
+	"github.com/indeedhat/rekt"
 	"github.com/stretchr/testify/require"
 )
 
 var rectangleOverlapTouchTests = []struct {
-	rect1    rectangled.Rectangle[string]
-	rect2    rectangled.Rectangle[string]
+	rect1    rekt.Rectangle[string]
+	rect2    rekt.Rectangle[string]
 	overlaps bool
-	touch1   []rectangled.Edge
-	touch2   []rectangled.Edge
+	touch1   []rekt.Edge
+	touch2   []rekt.Edge
 }{
 	{
-		rectangled.NewRectangle("above", 0, 0, 10, 10),
-		rectangled.NewRectangle("below", 0, 20, 10, 30),
+		rekt.NewRectangle("above", 0, 0, 10, 10),
+		rekt.NewRectangle("below", 0, 20, 10, 30),
 		false,
 		nil,
 		nil,
 	},
 	{
-		rectangled.NewRectangle("left", 0, 0, 10, 10),
-		rectangled.NewRectangle("right", 20, 0, 30, 10),
+		rekt.NewRectangle("left", 0, 0, 10, 10),
+		rekt.NewRectangle("right", 20, 0, 30, 10),
 		false,
 		nil,
 		nil,
 	},
 	{
-		rectangled.NewRectangle("touching-above", 0, 0, 10, 10),
-		rectangled.NewRectangle("touching-below", 0, 10, 10, 20),
+		rekt.NewRectangle("touching-above", 0, 0, 10, 10),
+		rekt.NewRectangle("touching-below", 0, 10, 10, 20),
 		false,
-		[]rectangled.Edge{rectangled.Bottom},
-		[]rectangled.Edge{rectangled.Top},
+		[]rekt.Edge{rekt.Bottom},
+		[]rekt.Edge{rekt.Top},
 	},
 	{
-		rectangled.NewRectangle("touching-left", 0, 0, 10, 10),
-		rectangled.NewRectangle("touching-right", 10, 0, 20, 10),
+		rekt.NewRectangle("touching-left", 0, 0, 10, 10),
+		rekt.NewRectangle("touching-right", 10, 0, 20, 10),
 		false,
-		[]rectangled.Edge{rectangled.Right},
-		[]rectangled.Edge{rectangled.Left},
+		[]rekt.Edge{rekt.Right},
+		[]rekt.Edge{rekt.Left},
 	},
 	{
-		rectangled.NewRectangle("full-overlap", 0, 0, 10, 10),
-		rectangled.NewRectangle("full-overlap", 0, 0, 10, 10),
+		rekt.NewRectangle("full-overlap", 0, 0, 10, 10),
+		rekt.NewRectangle("full-overlap", 0, 0, 10, 10),
 		true,
-		[]rectangled.Edge{rectangled.Top, rectangled.Right, rectangled.Bottom, rectangled.Left},
-		[]rectangled.Edge{rectangled.Top, rectangled.Right, rectangled.Bottom, rectangled.Left},
+		[]rekt.Edge{rekt.Top, rekt.Right, rekt.Bottom, rekt.Left},
+		[]rekt.Edge{rekt.Top, rekt.Right, rekt.Bottom, rekt.Left},
 	},
 	{
-		rectangled.NewRectangle("inside-of", 5, 5, 10, 10),
-		rectangled.NewRectangle("surrounding", 0, 0, 15, 15),
-		true,
-		nil,
-		nil,
-	},
-	{
-		rectangled.NewRectangle("top-left", 0, 0, 10, 10),
-		rectangled.NewRectangle("top-left-surrounding", 0, 0, 15, 15),
-		true,
-		[]rectangled.Edge{rectangled.Top, rectangled.Left},
-		[]rectangled.Edge{rectangled.Top, rectangled.Left},
-	},
-	{
-		rectangled.NewRectangle("bottom-right", 5, 5, 15, 15),
-		rectangled.NewRectangle("bottom-right-surrounding", 0, 0, 15, 15),
-		true,
-		[]rectangled.Edge{rectangled.Right, rectangled.Bottom},
-		[]rectangled.Edge{rectangled.Right, rectangled.Bottom},
-	},
-	{
-		rectangled.NewRectangle("overlap-above", 0, 0, 10, 10),
-		rectangled.NewRectangle("overlap-below", 0, 9, 10, 19),
-		true,
-		[]rectangled.Edge{rectangled.Right, rectangled.Left},
-		[]rectangled.Edge{rectangled.Right, rectangled.Left},
-	},
-	{
-		rectangled.NewRectangle("overlap-left", 0, 0, 10, 10),
-		rectangled.NewRectangle("overlap-right", 9, 0, 19, 10),
-		true,
-		[]rectangled.Edge{rectangled.Top, rectangled.Bottom},
-		[]rectangled.Edge{rectangled.Top, rectangled.Bottom},
-	},
-	{
-		rectangled.NewRectangle("bottom-right-corner", 0, 0, 10, 10),
-		rectangled.NewRectangle("top-left corner", 9, 9, 19, 19),
+		rekt.NewRectangle("inside-of", 5, 5, 10, 10),
+		rekt.NewRectangle("surrounding", 0, 0, 15, 15),
 		true,
 		nil,
 		nil,
 	},
 	{
-		rectangled.NewRectangle("bottom-left-corner", 9, 0, 19, 10),
-		rectangled.NewRectangle("top-right corner", 0, 9, 10, 19),
+		rekt.NewRectangle("top-left", 0, 0, 10, 10),
+		rekt.NewRectangle("top-left-surrounding", 0, 0, 15, 15),
+		true,
+		[]rekt.Edge{rekt.Top, rekt.Left},
+		[]rekt.Edge{rekt.Top, rekt.Left},
+	},
+	{
+		rekt.NewRectangle("bottom-right", 5, 5, 15, 15),
+		rekt.NewRectangle("bottom-right-surrounding", 0, 0, 15, 15),
+		true,
+		[]rekt.Edge{rekt.Right, rekt.Bottom},
+		[]rekt.Edge{rekt.Right, rekt.Bottom},
+	},
+	{
+		rekt.NewRectangle("overlap-above", 0, 0, 10, 10),
+		rekt.NewRectangle("overlap-below", 0, 9, 10, 19),
+		true,
+		[]rekt.Edge{rekt.Right, rekt.Left},
+		[]rekt.Edge{rekt.Right, rekt.Left},
+	},
+	{
+		rekt.NewRectangle("overlap-left", 0, 0, 10, 10),
+		rekt.NewRectangle("overlap-right", 9, 0, 19, 10),
+		true,
+		[]rekt.Edge{rekt.Top, rekt.Bottom},
+		[]rekt.Edge{rekt.Top, rekt.Bottom},
+	},
+	{
+		rekt.NewRectangle("bottom-right-corner", 0, 0, 10, 10),
+		rekt.NewRectangle("top-left corner", 9, 9, 19, 19),
+		true,
+		nil,
+		nil,
+	},
+	{
+		rekt.NewRectangle("bottom-left-corner", 9, 0, 19, 10),
+		rekt.NewRectangle("top-right corner", 0, 9, 10, 19),
 		true,
 		nil,
 		nil,
@@ -124,20 +124,20 @@ func TestRectangleTouches(t *testing.T) {
 }
 
 var rectangleOffsetTests = []struct {
-	rect   rectangled.Rectangle[string]
-	target rectangled.Rectangle[string]
+	rect   rekt.Rectangle[string]
+	target rekt.Rectangle[string]
 }{
 	{
-		rectangled.NewRectangle("pos offset", 0, 0, 10, 10),
-		rectangled.NewRectangle("pos offset", 10, 10, 0, 0),
+		rekt.NewRectangle("pos offset", 0, 0, 10, 10),
+		rekt.NewRectangle("pos offset", 10, 10, 0, 0),
 	},
 	{
-		rectangled.NewRectangle("neg offset", 0, 0, 10, 10),
-		rectangled.NewRectangle("neg offset", -10, -10, 0, 0),
+		rekt.NewRectangle("neg offset", 0, 0, 10, 10),
+		rekt.NewRectangle("neg offset", -10, -10, 0, 0),
 	},
 	{
-		rectangled.NewRectangle("zero offset", 0, 0, 10, 10),
-		rectangled.NewRectangle("zero offset", 0, 0, 0, 0),
+		rekt.NewRectangle("zero offset", 0, 0, 10, 10),
+		rekt.NewRectangle("zero offset", 0, 0, 0, 0),
 	},
 }
 
@@ -155,14 +155,14 @@ func TestRectangleOffset(t *testing.T) {
 }
 
 var rectangleAreaTests = []struct {
-	rect     rectangled.Rectangle[string]
+	rect     rekt.Rectangle[string]
 	expected int
 }{
-	{rectangled.NewRectangle("zero height", 0, 0, 10, 0), 0},
-	{rectangled.NewRectangle("zero width", 0, 0, 0, 10), 0},
-	{rectangled.NewRectangle("zero size", 0, 0, 0, 0), 0},
-	{rectangled.NewRectangle("positive area", 0, 0, 10, 10), 100},
-	{rectangled.NewRectangle("negative area", 0, 0, -10, -10), 100},
+	{rekt.NewRectangle("zero height", 0, 0, 10, 0), 0},
+	{rekt.NewRectangle("zero width", 0, 0, 0, 10), 0},
+	{rekt.NewRectangle("zero size", 0, 0, 0, 0), 0},
+	{rekt.NewRectangle("positive area", 0, 0, 10, 10), 100},
+	{rekt.NewRectangle("negative area", 0, 0, -10, -10), 100},
 }
 
 func TestRectangleArea(t *testing.T) {
@@ -174,15 +174,15 @@ func TestRectangleArea(t *testing.T) {
 }
 
 var rectangleValidityTests = []struct {
-	rect     rectangled.Rectangle[string]
+	rect     rekt.Rectangle[string]
 	expected error
 }{
-	{rectangled.NewRectangle("zero height", 0, 0, 10, 0), rectangled.ErrZoroArea},
-	{rectangled.NewRectangle("zero width", 0, 0, 0, 10), rectangled.ErrZoroArea},
-	{rectangled.NewRectangle("zero size", 0, 0, 0, 0), rectangled.ErrZoroArea},
-	{rectangled.NewRectangle("flipped points", 0, 0, -10, -10), rectangled.ErrBadPoints},
-	{rectangled.NewRectangle("valid", 0, 0, 10, 10), nil},
-	{rectangled.NewRectangle("valid in negative", -10, -10, 0, 0), nil},
+	{rekt.NewRectangle("zero height", 0, 0, 10, 0), rekt.ErrZoroArea},
+	{rekt.NewRectangle("zero width", 0, 0, 0, 10), rekt.ErrZoroArea},
+	{rekt.NewRectangle("zero size", 0, 0, 0, 0), rekt.ErrZoroArea},
+	{rekt.NewRectangle("flipped points", 0, 0, -10, -10), rekt.ErrBadPoints},
+	{rekt.NewRectangle("valid", 0, 0, 10, 10), nil},
+	{rekt.NewRectangle("valid in negative", -10, -10, 0, 0), nil},
 }
 
 func TestRectangleValidate(t *testing.T) {
@@ -198,23 +198,23 @@ func TestRectangleValidate(t *testing.T) {
 }
 
 var rectangleOverlappingAreaTests = []struct {
-	rect1    rectangled.Rectangle[string]
-	rect2    rectangled.Rectangle[string]
-	expected *rectangled.Rectangle[string]
+	rect1    rekt.Rectangle[string]
+	rect2    rekt.Rectangle[string]
+	expected *rekt.Rectangle[string]
 }{
 	{
-		rectangled.NewRectangle("overlap-1", 0, 0, 10, 10),
-		rectangled.NewRectangle("overlap-2", 5, 5, 15, 15),
-		&rectangled.Rectangle[string]{"overlap-2", 5, 5, 10, 10},
+		rekt.NewRectangle("overlap-1", 0, 0, 10, 10),
+		rekt.NewRectangle("overlap-2", 5, 5, 15, 15),
+		&rekt.Rectangle[string]{"overlap-2", 5, 5, 10, 10},
 	},
 	{
-		rectangled.NewRectangle("overlap-2", 5, 5, 15, 15),
-		rectangled.NewRectangle("overlap-1", 0, 0, 10, 10),
-		&rectangled.Rectangle[string]{"overlap-1", 5, 5, 10, 10},
+		rekt.NewRectangle("overlap-2", 5, 5, 15, 15),
+		rekt.NewRectangle("overlap-1", 0, 0, 10, 10),
+		&rekt.Rectangle[string]{"overlap-1", 5, 5, 10, 10},
 	},
 	{
-		rectangled.NewRectangle("no-overlap-1", 0, 0, 10, 10),
-		rectangled.NewRectangle("no-overlap-2", 10, 10, 20, 20),
+		rekt.NewRectangle("no-overlap-1", 0, 0, 10, 10),
+		rekt.NewRectangle("no-overlap-2", 10, 10, 20, 20),
 		nil,
 	},
 }
@@ -238,15 +238,15 @@ func TestRectangleOverlappingArea(t *testing.T) {
 }
 
 var rectangleWidthHeightTests = []struct {
-	rect           rectangled.Rectangle[string]
+	rect           rekt.Rectangle[string]
 	expectedWidth  int
 	expectedHeight int
 }{
-	{rectangled.NewRectangle("simple", 0, 0, 10, 10), 10, 10},
-	{rectangled.NewRectangle("negative", -20, -20, -10, -10), 10, 10},
-	{rectangled.NewRectangle("negative->posative", -10, -10, 10, 10), 20, 20},
+	{rekt.NewRectangle("simple", 0, 0, 10, 10), 10, 10},
+	{rekt.NewRectangle("negative", -20, -20, -10, -10), 10, 10},
+	{rekt.NewRectangle("negative->posative", -10, -10, 10, 10), 20, 20},
 	// although this requires a Rectangle that would not pass the Validate checks its worth testing imo
-	{rectangled.NewRectangle("zero-size", 0, 0, 0, 0), 0, 0},
+	{rekt.NewRectangle("zero-size", 0, 0, 0, 0), 0, 0},
 }
 
 func TestRectangleWidth(t *testing.T) {
@@ -265,8 +265,8 @@ func TestRectangleHeight(t *testing.T) {
 	}
 }
 
-func edge(id string, x, y, w, z int) *rectangled.EdgeCoordinates[string] {
-	return &rectangled.EdgeCoordinates[string]{
+func edge(id string, x, y, w, z int) *rekt.EdgeCoordinates[string] {
+	return &rekt.EdgeCoordinates[string]{
 		ID: id,
 		X:  x,
 		Y:  y,
@@ -276,28 +276,28 @@ func edge(id string, x, y, w, z int) *rectangled.EdgeCoordinates[string] {
 }
 
 var rectangleTouchCoordinatesTests = []struct {
-	rect      rectangled.Rectangle[string]
-	target    rectangled.Rectangle[string]
-	coords    [4]*rectangled.EdgeCoordinates[string]
-	coordsRev [4]*rectangled.EdgeCoordinates[string]
+	rect      rekt.Rectangle[string]
+	target    rekt.Rectangle[string]
+	coords    [4]*rekt.EdgeCoordinates[string]
+	coordsRev [4]*rekt.EdgeCoordinates[string]
 }{
 	{
-		rectangled.NewRectangle("below", 0, 10, 20, 20),
-		rectangled.NewRectangle("above", 5, 0, 15, 10),
-		[4]*rectangled.EdgeCoordinates[string]{
+		rekt.NewRectangle("below", 0, 10, 20, 20),
+		rekt.NewRectangle("above", 5, 0, 15, 10),
+		[4]*rekt.EdgeCoordinates[string]{
 			edge("above", 5, 10, 15, 10), nil, nil, nil,
 		},
-		[4]*rectangled.EdgeCoordinates[string]{
+		[4]*rekt.EdgeCoordinates[string]{
 			nil, nil, edge("below", 5, 10, 15, 10), nil,
 		},
 	},
 	{
-		rectangled.NewRectangle("left", 0, 0, 10, 20),
-		rectangled.NewRectangle("right", 10, 5, 15, 15),
-		[4]*rectangled.EdgeCoordinates[string]{
+		rekt.NewRectangle("left", 0, 0, 10, 20),
+		rekt.NewRectangle("right", 10, 5, 15, 15),
+		[4]*rekt.EdgeCoordinates[string]{
 			nil, edge("right", 10, 5, 10, 15), nil, nil,
 		},
-		[4]*rectangled.EdgeCoordinates[string]{
+		[4]*rekt.EdgeCoordinates[string]{
 			nil, nil, nil, edge("left", 10, 5, 10, 15),
 		},
 	},
@@ -306,17 +306,17 @@ var rectangleTouchCoordinatesTests = []struct {
 func TestRectangleEdgeCoordinates(t *testing.T) {
 	for _, testCase := range rectangleTouchCoordinatesTests {
 		t.Run(fmt.Sprintf("%s -> %s", testCase.rect.ID, testCase.target.ID), func(t *testing.T) {
-			require.Equal(t, testCase.coords[0], testCase.rect.TouchCoordinates(testCase.target, rectangled.Top))
-			require.Equal(t, testCase.coords[1], testCase.rect.TouchCoordinates(testCase.target, rectangled.Right))
-			require.Equal(t, testCase.coords[2], testCase.rect.TouchCoordinates(testCase.target, rectangled.Bottom))
-			require.Equal(t, testCase.coords[3], testCase.rect.TouchCoordinates(testCase.target, rectangled.Left))
+			require.Equal(t, testCase.coords[0], testCase.rect.TouchCoordinates(testCase.target, rekt.Top))
+			require.Equal(t, testCase.coords[1], testCase.rect.TouchCoordinates(testCase.target, rekt.Right))
+			require.Equal(t, testCase.coords[2], testCase.rect.TouchCoordinates(testCase.target, rekt.Bottom))
+			require.Equal(t, testCase.coords[3], testCase.rect.TouchCoordinates(testCase.target, rekt.Left))
 		})
 
 		t.Run(fmt.Sprintf("%s -> %s", testCase.target.ID, testCase.rect.ID), func(t *testing.T) {
-			require.Equal(t, testCase.coordsRev[0], testCase.target.TouchCoordinates(testCase.rect, rectangled.Top))
-			require.Equal(t, testCase.coordsRev[1], testCase.target.TouchCoordinates(testCase.rect, rectangled.Right))
-			require.Equal(t, testCase.coordsRev[2], testCase.target.TouchCoordinates(testCase.rect, rectangled.Bottom))
-			require.Equal(t, testCase.coordsRev[3], testCase.target.TouchCoordinates(testCase.rect, rectangled.Left))
+			require.Equal(t, testCase.coordsRev[0], testCase.target.TouchCoordinates(testCase.rect, rekt.Top))
+			require.Equal(t, testCase.coordsRev[1], testCase.target.TouchCoordinates(testCase.rect, rekt.Right))
+			require.Equal(t, testCase.coordsRev[2], testCase.target.TouchCoordinates(testCase.rect, rekt.Bottom))
+			require.Equal(t, testCase.coordsRev[3], testCase.target.TouchCoordinates(testCase.rect, rekt.Left))
 		})
 	}
 }
